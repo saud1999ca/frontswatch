@@ -35,6 +35,11 @@ head=f'''<!doctype html>
 site=head+src[:i]+'\n</head>\n<body>'+src[i:]+"\n<script>if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))</script>\n</body>\n</html>\n"
 
 out=p('..','site') if os.path.basename(BASE)=='src' else p('site')
+# keep the last share card: where no browser can redraw it (the CI runner),
+# the old daily.png must survive the wipe below instead of being deleted
+_card=None
+try: _card=open(out+'/daily.png','rb').read()
+except OSError: pass
 shutil.rmtree(out,ignore_errors=True); os.makedirs(out)
 
 for _f in ('conf.js','data.js','geo.js','ar.js'):
@@ -55,7 +60,8 @@ import gen_events
 event_urls=gen_events.build(out)
 
 import gen_card
-gen_card.build(out)
+if not gen_card.build(out) and _card and not os.path.exists(out+'/daily.png'):
+    open(out+'/daily.png','wb').write(_card)
 
 sitemap_urls=[(f'{D}/',today)]+[(u,today) for u in event_urls]
 sm='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
