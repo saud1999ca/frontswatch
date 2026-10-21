@@ -35,21 +35,12 @@ jobs:
 
       # gen_card.py screenshots the daily share card; without a browser the
       # build still succeeds but daily.png keeps yesterday's numbers
-      # Everything below is only needed to redraw the daily share card.
-      # The site itself must build without it, so neither step may fail the
-      # job: when there is no browser, build.py leaves daily.png untouched.
-      - name: Install Chromium for the daily card
-        continue-on-error: true
-        run: |
-          pip install --quiet playwright || pip install --quiet --break-system-packages playwright
-          playwright install chromium || playwright install --with-deps chromium
-
-      - name: Arabic fallback font
-        continue-on-error: true
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-noto-core
-
+      # No browser here on purpose. The runner has a local font calling itself
+      # "Noto Sans Arabic" that draws a dotless final yaa, so a card rendered
+      # here looks misspelt to an Arabic reader. build.py skips the screenshot
+      # when no browser is present and leaves the committed daily.png alone;
+      # the card is redrawn wherever the real face resolves, which includes
+      # the hourly routine - the same runs that change what the card says.
       - name: Build
         working-directory: src
         run: python3 build.py
