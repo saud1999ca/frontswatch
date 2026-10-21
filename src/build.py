@@ -37,12 +37,12 @@ site=head+src[:i]+'\n</head>\n<body>'+src[i:]+"\n<script>if('serviceWorker' in n
 out=p('..','site') if os.path.basename(BASE)=='src' else p('site')
 shutil.rmtree(out,ignore_errors=True); os.makedirs(out)
 
-for _f in ('data.js','geo.js','ar.js'):
+for _f in ('conf.js','data.js','geo.js','ar.js'):
     _h=hashlib.md5(open(p(_f),'rb').read()).hexdigest()[:8]
     site=site.replace(f'<script src="{_f}"></script>',f'<script src="{_f}?v={_h}"></script>')
 open(out+'/index.html','w').write(site)
 open(out+'/_headers','w').write('/data.js\n  Cache-Control: public, max-age=31536000, immutable\n/geo.js\n  Cache-Control: public, max-age=31536000, immutable\n/ar.js\n  Cache-Control: public, max-age=31536000, immutable\n/\n  Cache-Control: public, max-age=0, must-revalidate\n/index.html\n  Cache-Control: public, max-age=0, must-revalidate\n/sw.js\n  Cache-Control: no-cache\n')
-for f in ('data.js','geo.js','ar.js'): shutil.copy(p(f),out+'/'+f)
+for f in ('conf.js','data.js','geo.js','ar.js'): shutil.copy(p(f),out+'/'+f)
 for f in os.listdir(p('pwa')): shutil.copy(p('pwa',f),out+'/'+f)
 open(out+'/robots.txt','w').write(f'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: {D}/sitemap.xml\n')
 

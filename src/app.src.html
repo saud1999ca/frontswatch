@@ -387,7 +387,7 @@ footer{opacity:.8}
     <div class="left">
       <div class="mapwrap" id="mapwrap" dir="ltr">
         
-        <div class="foc" role="group" aria-label="Zoom to a front"><span data-i="t_zoomto">Zoom to</span><button data-f="13.58,44.02" data-i="f_taiz">Taiz</button><button data-f="15.46,45.33" data-i="f_marib">Marib</button><button data-f="14.2,43.3" data-i="f_red">Red Sea</button><button data-f="12.9,45.0" data-i="f_aden">Aden</button></div>
+        <div class="foc" id="foc" role="group" aria-label="Zoom to a front"><span data-i="t_zoomto">Zoom to</span></div>
         <svg id="map" role="img" aria-label="Map of Yemen and the Red Sea region. Governorates are coloured by controlling force, markers show events."></svg>
         <div class="vw" role="group" aria-label="Map view"><button id="vAuto" aria-pressed="true" data-i="v_auto">Auto</button><button id="vYem" aria-pressed="false" data-i="v_yem">Yemen</button><button id="vReg" aria-pressed="false" data-i="v_reg">Region</button></div>
         <div class="ctl"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button></div>
@@ -456,11 +456,12 @@ footer{opacity:.8}
   <footer data-i="t_footer">Governorate and district boundaries: OCHA and Yemen Central Statistical Organization via geoBoundaries (CC BY 3.0 IGO). Neighbouring countries and roads: Natural Earth (public domain). Not for navigation or safety decisions. <a href="/events/">All events</a>. Contact: <a href="mailto:contact@frontswatch.com">contact@frontswatch.com</a></footer>
 </div>
 
+<script src="conf.js"></script>
 <script src="data.js"></script>
 <script src="geo.js"></script>
 <script src="ar.js"></script>
 <script>
-const START='2014-09-21',END=LAST_UPDATED;
+const START=CONF.start,END=LAST_UPDATED;
 let LANG='en';try{LANG=localStorage.getItem('yfl-lang')||((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en')}catch(e){}
 if(LANG!=='ar')LANG='en';
 const tr=(k,p)=>{let s=(LANG==='ar'&&AR.ui[k])||k;if(p)for(const x in p)s=s.split('{'+x+'}').join(p[x]);return s};
@@ -471,9 +472,9 @@ const dn=s=>{const p=s.split('-');return Math.floor(Date.UTC(+p[0],+p[1]-1,+p[2]
 const isoOf=n=>new Date(n*864e5).toISOString().slice(0,10);
 const fmt=s=>{const p=s.split('-');return (p[2]?(+p[2])+' ':'')+MONn(+p[1]-1)+' '+p[0]};
 const SN=dn(START),EN=dn(END);
-const NAMES={saada:'Saada',amran:'Amran',capital:'Sanaa City',sanaa:'Sanaa Governorate',hajjah:'Hajjah',mahwit:'Al Mahwit',hodeidah:'Hodeidah',raymah:'Raymah',dhamar:'Dhamar',ibb:'Ibb',bayda:'Al Bayda',jawf:'Al Jawf',marib:'Marib',taiz:'Taiz',lahij:'Lahij',aden:'Aden',dhale:'Ad Dhale',abyan:'Abyan',shabwa:'Shabwa',hadramawt:'Hadramawt',mahrah:'Al Mahrah',socotra:'Socotra'};
-const SHORT={capital:'',sanaa:'',amran:'',mahwit:'',raymah:'',aden:'',dhale:'Dhale',bayda:'Bayda',mahrah:'Mahrah'};
-const WHO={H:'Houthis',G:'Government',S:'STC',A:'AQAP'};
+const NAMES=CONF.names;
+const SHORT=CONF.short;
+const WHO=CONF.who;
 const IDS=Object.keys(NAMES);
 const nm=id=>LANG==='ar'?AR.names[id]:NAMES[id];
 const cn=n=>LANG==='ar'&&AR.cities[n]||n;
@@ -486,7 +487,7 @@ const SUBLAB={missile:'Missile strike',drone:'Drone attack',airstrike:'Air strik
 const KSUB={strike:'missile',clash:'ground',control:'control',politics:'politics',humanitarian:'aid'};
 const ACOL={H:'h',G:'g',C:'g',S:'s',A:'a',U:'u'};
 const KINDS={control:'Control change',strike:'Strike or attack',clash:'Ground fighting',politics:'Political',humanitarian:'Humanitarian'};
-const ACT={H:'Houthis',G:'Government',C:'Saudi-led coalition',S:'STC',A:'AQAP',U:'Unclear'};
+const ACT=CONF.act;
 const STAT={confirmed:'Confirmed',reported:'Reported',claimed:'Claimed',reference:'Reference'};
 const RANGES=[['1','24h'],['7','7 days'],['30','30 days'],['365','1 year'],['all','All']];
 const BANDS={'likely':'Likely','uncertain':'Uncertain','unlikely':'Unlikely','very-unlikely':'Very unlikely'};
@@ -549,15 +550,18 @@ let drawT=-1e9,drawQ=null;
 function fullDraw(){drawT=performance.now();drawLabels();drawMarkers()}
 function applyVB(){setVB();const now=performance.now();if(now-drawT>=110){if(drawQ){clearTimeout(drawQ);drawQ=null}fullDraw()}else if(!drawQ)drawQ=setTimeout(()=>{drawQ=null;fullDraw()},110-(now-drawT))}
 function fitBox(b){const {cw,ch}=dims();const x0=px(b[1],b[2]),x1=px(b[0],b[3]);const bw=x1[0]-x0[0],bh=x1[1]-x0[1];vb.w=Math.max(bw,bh*cw/ch)*1.04;vb.cx=(x0[0]+x1[0])/2;vb.cy=(x0[1]+x1[1])/2}
-const BOX={yemen:[11.3,19.8,41.2,55.6],region:[11.3,27.3,37.6,57.2]};
-function autoKind(){return EVS.some(e=>visible(e)&&e.ll&&(e.ll[0]>20.2||e.ll[1]<40.3||e.ll[1]>56))?'region':'yemen'}
+const BOX=CONF.box;
+function autoKind(){const b=CONF.homeBounds;return EVS.some(e=>visible(e)&&e.ll&&(e.ll[0]>b.latMax||e.ll[1]<b.lonMin||e.ll[1]>b.lonMax))?'region':CONF.homeKey}
 function setView(mode,user){st.view=mode;if(user)st.manual=false;const k=mode==='auto'?autoKind():mode;fitBox(BOX[k]);['Auto','Yem','Reg'].forEach(x=>$('#v'+x).setAttribute('aria-pressed',String((x==='Auto'&&mode==='auto')||(x==='Yem'&&mode==='yemen')||(x==='Reg'&&mode==='region'))));applyVB()}
 function zoomAt(f,cx,cy){const nw=Math.max(26,Math.min(3200,vb.w/f));const rx=(cx-vb.cx)/vb.w;vb.cx=cx-rx*nw;const {cw,ch}=dims();const h=vb.w*ch/cw,nh=nw*ch/cw;const ry=(cy-vb.cy)/h;vb.cy=cy-ry*nh;vb.w=nw;st.manual=true;applyVB()}
 function svgPt(e){const r=svg.getBoundingClientRect(),s=r.width/vb.w,h=vb.w*r.height/r.width;return[vb.cx-vb.w/2+(e.clientX-r.left)/s,vb.cy-h/2+(e.clientY-r.top)/s]}
 $('#zin').onclick=()=>zoomAt(1.5,vb.cx,vb.cy);$('#zout').onclick=()=>zoomAt(1/1.5,vb.cx,vb.cy);
 var HS='cross';
+/* the zoom targets belong to the conflict, not the app */
+CONF.focus.forEach(f=>{const b=document.createElement('button');b.dataset.f=f.ll.join(',');
+  b.dataset.i=f.i;b.textContent=f.en;$('#foc').appendChild(b)});
 document.querySelectorAll('.foc button').forEach(b=>b.onclick=()=>{const [la,lo]=b.dataset.f.split(',').map(Number),q=px(la,lo);vb.w=200;vb.cx=q[0];vb.cy=q[1];st.manual=true;['Auto','Yem','Reg'].forEach(x=>$('#v'+x).setAttribute('aria-pressed','false'));applyVB()});
-$('#vAuto').onclick=()=>setView('auto',1);$('#vYem').onclick=()=>setView('yemen',1);$('#vReg').onclick=()=>setView('region',1);
+$('#vAuto').onclick=()=>setView('auto',1);$('#vYem').onclick=()=>setView(CONF.homeKey,1);$('#vReg').onclick=()=>setView('region',1);
 svg.addEventListener('wheel',e=>{e.preventDefault();const p=svgPt(e);zoomAt(e.deltaY<0?1.25:.8,p[0],p[1])},{passive:false});
 let drag=null,moved=false;const ptrs=new Map();let pinch=null;
 function endPtr(e){if(e.type==='pointerup'&&ptrs.has(e.pointerId)&&ptrs.size===1&&!moved){const ids=evIdsAt(e);if(ids.length){showEvTip(ids,e,true)}else{const g=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.parentNode===govG&&x.dataset.id);if(g){hideTip();touchTip=e.pointerType==='touch';showTip(e,g.dataset.id)}}}
