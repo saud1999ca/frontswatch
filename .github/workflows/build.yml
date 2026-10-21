@@ -1,0 +1,50 @@
+name: Rebuild site
+
+# When anything under src/ changes (an event added from the admin page, a hand
+# edit, or the hourly routine), regenerate site/ and commit it back. Cloudflare
+# Pages deploys site/ as-is, so it has to be committed, not built there.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rebuild-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # gen_events.py shells out to node to read the JS data files
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build
+        working-directory: src
+        run: python3 build.py
+
+      - name: Commit regenerated site
+        run: |
+          if [ -z "$(git status --porcelain site)" ]; then
+            echo "site/ is already up to date — nothing to commit."
+            exit 0
+          fi
+          git config user.name "frontswatch-bot"
+          git config user.email "noreply@frontswatch.com"
+          git add site
+          git commit -m "Rebuild site from src [skip ci]"
+          git push

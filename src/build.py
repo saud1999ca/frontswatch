@@ -44,7 +44,11 @@ open(out+'/index.html','w').write(site)
 open(out+'/_headers','w').write('/data.js\n  Cache-Control: public, max-age=31536000, immutable\n/geo.js\n  Cache-Control: public, max-age=31536000, immutable\n/ar.js\n  Cache-Control: public, max-age=31536000, immutable\n/\n  Cache-Control: public, max-age=0, must-revalidate\n/index.html\n  Cache-Control: public, max-age=0, must-revalidate\n/sw.js\n  Cache-Control: no-cache\n')
 for f in ('data.js','geo.js','ar.js'): shutil.copy(p(f),out+'/'+f)
 for f in os.listdir(p('pwa')): shutil.copy(p('pwa',f),out+'/'+f)
-open(out+'/robots.txt','w').write(f'User-agent: *\nAllow: /\nSitemap: {D}/sitemap.xml\n')
+open(out+'/robots.txt','w').write(f'User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: {D}/sitemap.xml\n')
+
+# internal admin page (noindex, not linked from the site, not in the sitemap)
+os.makedirs(out+'/admin',exist_ok=True)
+shutil.copy(p('admin.src.html'),out+'/admin/index.html')
 today=datetime.date.today().isoformat()
 
 import gen_events

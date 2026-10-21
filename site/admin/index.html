@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>إضافة حدث · راصد</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#f6f7f8; --panel:#fff; --ink:#111b21; --muted:#5b6b76; --line:#dde3e7;
+  --accent:#c8332c; --ok:#1d7a4c; --warn:#8a5a00;
+  --h:#d9534f; --g:#4a6fd4; --s:#1f9d8d;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1216; --panel:#161e24; --ink:#e7edf0; --muted:#93a1aa; --line:#2a3640;
+  --accent:#ef6b64; --ok:#4fc38a; --warn:#d9a441; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0c1216; --panel:#161e24; --ink:#e7edf0; --muted:#93a1aa; --line:#2a3640;
+  --accent:#ef6b64; --ok:#4fc38a; --warn:#d9a441; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Noto Sans Arabic','Archivo',system-ui,sans-serif;font-size:15px;line-height:1.6;
+  padding:0 16px 56px}
+.wrap{max-width:720px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0 10px;flex-wrap:wrap}
+h1{font-size:20px;margin:0;letter-spacing:-.01em}
+h1 small{font-weight:400;color:var(--muted);font-size:13px}
+a{color:var(--accent)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.card h2{font-size:14px;margin:0 0 10px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+label{display:block;margin-bottom:12px}
+label > span{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+label .hint{font-weight:400;color:var(--muted);font-size:12px}
+input,select,textarea,button{font:inherit;font-size:15px;color:var(--ink)}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);
+  border-radius:8px;padding:9px 11px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{min-height:84px;resize:vertical;line-height:1.55}
+input[dir=ltr],textarea[dir=ltr]{direction:ltr;text-align:left}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:560px){.row{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--accent);color:#fff;border:0;border-radius:999px;padding:11px 22px;
+  font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line);font-weight:600;padding:8px 16px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.note{font-size:13px;color:var(--muted);margin:0 0 10px}
+.msg{border-radius:8px;padding:11px 13px;font-size:14px;margin-top:12px;display:none;white-space:pre-wrap;word-break:break-word}
+.msg.on{display:block}
+.msg.err{background:color-mix(in srgb,var(--accent) 12%,transparent);border:1px solid var(--accent)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);border:1px solid var(--ok)}
+.msg.work{background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid var(--warn)}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;
+  overflow:auto;font-size:11.5px;direction:ltr;text-align:left;margin:0;
+  font-family:'JetBrains Mono',ui-monospace,monospace;line-height:1.5}
+details summary{cursor:pointer;color:var(--muted);font-size:13px;font-weight:600}
+.tokrow{display:flex;gap:8px;align-items:flex-end}
+.tokrow label{flex:1;margin-bottom:0}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.pill.good{color:var(--ok);border-color:var(--ok)}
+footer{color:var(--muted);font-size:12.5px;text-align:center;padding-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>إضافة حدث <small>· راصد</small></h1>
+  <a href="/" class="pill">← الموقع</a>
+</header>
+
+<div class="card">
+  <h2>الاتصال بالمستودع</h2>
+  <p class="note">يحتاج رمز وصول من GitHub بصلاحية <b>Contents: Read and write</b> على مستودع <code>frontswatch</code> فقط. يُحفظ في هذا المتصفح وحده ولا يُرسل لأي جهة غير GitHub.</p>
+  <div class="tokrow">
+    <label><span>رمز GitHub <span class="hint">(github_pat_…)</span></span>
+      <input id="tok" type="password" dir="ltr" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+    <button class="btn ghost" id="forget" type="button">مسح</button>
+  </div>
+  <div class="bar"><span class="pill" id="tokstate">لم يُحفظ بعد</span></div>
+</div>
+
+<form id="f">
+<div class="card">
+  <h2>الحدث</h2>
+
+  <label><span>التاريخ</span><input id="d" type="date" required></label>
+
+  <label><span>العنوان بالإنجليزية <span class="hint">— سطر واحد قصير</span></span>
+    <input id="t_en" dir="ltr" required maxlength="120" placeholder="Houthi missile strike on a military camp in Shabwa"></label>
+
+  <label><span>العنوان بالعربية</span>
+    <input id="t_ar" required maxlength="120" placeholder="هجوم صاروخي حوثي على معسكر عسكري في شبوة"></label>
+
+  <label><span>الوصف بالإنجليزية <span class="hint">— جملة أو جملتان، واذكر عدم اليقين صراحةً</span></span>
+    <textarea id="x_en" dir="ltr" required maxlength="700"></textarea></label>
+
+  <label><span>الوصف بالعربية</span>
+    <textarea id="x_ar" required maxlength="700"></textarea></label>
+
+  <div class="row">
+    <label><span>خط العرض <span class="hint">lat</span></span>
+      <input id="lat" dir="ltr" inputmode="decimal" required placeholder="14.54"></label>
+    <label><span>خط الطول <span class="hint">lon</span></span>
+      <input id="lon" dir="ltr" inputmode="decimal" required placeholder="46.83"></label>
+  </div>
+  <p class="note">لو الموقع الدقيق غير معروف، استخدم إحداثيات عاصمة المحافظة واذكر ذلك في الوصف.</p>
+
+  <div class="row">
+    <label><span>النوع</span>
+      <select id="k">
+        <option value="strike">ضربة أو هجوم — strike</option>
+        <option value="clash">قتال بري — clash</option>
+        <option value="control">تغيّر سيطرة — control</option>
+        <option value="politics">تطور سياسي — politics</option>
+        <option value="humanitarian">إنساني — humanitarian</option>
+      </select></label>
+
+    <label><span>الطرف</span>
+      <select id="by">
+        <option value="H">الحوثيون — H</option>
+        <option value="G">الحكومة — G</option>
+        <option value="C">التحالف — C</option>
+        <option value="S">المجلس الانتقالي — S</option>
+        <option value="A">القاعدة — A</option>
+        <option value="U">غير معروف — U</option>
+      </select></label>
+
+    <label><span>درجة التأكد</span>
+      <select id="st">
+        <option value="reported">غير مؤكد — reported (مصدر واحد موثوق)</option>
+        <option value="confirmed">مؤكد — confirmed (مصدران مستقلان)</option>
+        <option value="claimed">مُدّعى — claimed (ادعاء طرف في النزاع)</option>
+        <option value="reference">خلفية — reference</option>
+      </select></label>
+
+    <label><span>الأيقونة</span>
+      <select id="ic">
+        <option value="airstrike">غارة جوية — airstrike</option>
+        <option value="missile">صاروخ — missile</option>
+        <option value="drone">مسيّرة — drone</option>
+        <option value="naval">بحري — naval</option>
+        <option value="ground">قتال بري — ground</option>
+        <option value="control">سيطرة — control</option>
+        <option value="politics">سياسي — politics</option>
+        <option value="aid">إغاثة — aid</option>
+      </select></label>
+  </div>
+</div>
+
+<div class="card">
+  <h2>المصدر</h2>
+  <p class="note">مطلوب رابط حقيقي يفتح. المصادر المعتمدة: الجزيرة، الأناضول، ACLED، Long War Journal، ISW/Critical Threats، Security Council Report.</p>
+  <label><span>وصف المصدر <span class="hint">— كما سيظهر للقارئ</span></span>
+    <input id="s_lab" dir="ltr" required maxlength="160" placeholder="Al Jazeera, 21 Oct 2026: Blast heard in Aden"></label>
+  <label><span>الرابط</span>
+    <input id="s_url" dir="ltr" type="url" required placeholder="https://www.aljazeera.com/news/..."></label>
+</div>
+
+<div class="card">
+  <h2>المعاينة</h2>
+  <pre id="prev">—</pre>
+  <div class="bar" style="margin-top:12px">
+    <button class="btn" id="go" type="submit">نشر الحدث</button>
+    <span class="note" style="margin:0">يُضاف ويُنشر خلال دقيقة تقريبًا.</span>
+  </div>
+  <div class="msg" id="msg"></div>
+</div>
+</form>
+
+<footer>صفحة داخلية — غير مفهرسة في محركات البحث.</footer>
+</div>
+
+<script>
+const REPO='saud1999ca/frontswatch', BRANCH='main', API='https://api.github.com';
+const $=s=>document.querySelector(s);
+const el={tok:$('#tok'),msg:$('#msg'),prev:$('#prev'),go:$('#go')};
+
+/* ---------- token kept only in this browser ---------- */
+function loadTok(){try{return localStorage.getItem('fw-gh-token')||''}catch(e){return ''}}
+function tokState(){
+  const v=el.tok.value.trim();
+  const p=$('#tokstate');
+  p.textContent=v?'محفوظ في هذا المتصفح':'لم يُحفظ بعد';
+  p.classList.toggle('good',!!v);
+}
+el.tok.value=loadTok(); tokState();
+el.tok.addEventListener('input',()=>{
+  try{localStorage.setItem('fw-gh-token',el.tok.value.trim())}catch(e){}
+  tokState();
+});
+$('#forget').onclick=()=>{
+  el.tok.value='';
+  try{localStorage.removeItem('fw-gh-token')}catch(e){}
+  tokState();
+};
+
+/* ---------- helpers ---------- */
+const clean=s=>String(s).replace(/\s+/g,' ').trim();
+const q=s=>"'"+clean(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'";
+const jq=s=>JSON.stringify(clean(s));
+
+function say(kind,text){
+  el.msg.className='msg on '+kind;
+  el.msg.textContent=text;
+}
+
+function srcKey(url,date){
+  let host='src';
+  try{host=new URL(url).hostname.replace(/^www\./,'').split('.')[0]}catch(e){}
+  const abbr={aljazeera:'aj',aa:'anadolu',acleddata:'acled',longwarjournal:'lwj',
+              understandingwar:'isw',criticalthreats:'ct',securitycouncilreport:'scr',
+              x:'isw',twitter:'isw',reuters:'reu',wikipedia:'wp'}[host]||host.slice(0,6);
+  return abbr+date.slice(5,7)+date.slice(8,10);
+}
+
+function rowLine(v){
+  return '['+[q(v.d),q(v.t_en),q(v.x_en),'['+v.lat+','+v.lon+']',
+    q(v.k),q(v.by),q(v.st),q(v.key),q(v.ic)].join(',')+'],';
+}
+
+/* ---------- patching the source files as text ---------- */
+function addSource(data,key,label,url){
+  const rowsAt=data.indexOf('const ROWS=[');
+  if(rowsAt<0)throw new Error('ROWS not found in data.js');
+  const close=data.lastIndexOf('};',rowsAt);
+  if(close<0)throw new Error('end of SRC not found in data.js');
+  return data.slice(0,close)+' '+key+':['+q(label)+','+q(url)+'],\n'+data.slice(close);
+}
+function addRow(data,line){
+  const rowsAt=data.indexOf('const ROWS=[');
+  const close=data.indexOf('\n];',rowsAt);
+  if(close<0)throw new Error('end of ROWS not found in data.js');
+  return data.slice(0,close)+'\n'+line+data.slice(close);
+}
+function setUpdated(data,date){
+  return data.replace(/const LAST_UPDATED='[^']*';/,"const LAST_UPDATED='"+date+"';");
+}
+/* walk the AR.rows array with string awareness so a ] inside text can't fool us */
+function arRowsEnd(ar){
+  const at=ar.indexOf('"rows":');
+  if(at<0)throw new Error('AR.rows not found in ar.js');
+  const start=ar.indexOf('[',at);
+  let depth=0,inStr=false,esc=false;
+  for(let i=start;i<ar.length;i++){
+    const c=ar[i];
+    if(inStr){ if(esc)esc=false; else if(c==='\\')esc=true; else if(c==='"')inStr=false; continue }
+    if(c==='"'){inStr=true;continue}
+    if(c==='[')depth++;
+    else if(c===']'){depth--; if(depth===0)return i}
+  }
+  throw new Error('AR.rows array is not closed in ar.js');
+}
+function addAr(ar,title,desc){
+  const end=arRowsEnd(ar);
+  return ar.slice(0,end)+',['+jq(title)+','+jq(desc)+']'+ar.slice(end);
+}
+
+/* ---------- GitHub ---------- */
+async function gh(path,opts){
+  const t=el.tok.value.trim();
+  if(!t)throw new Error('ضع رمز GitHub أولًا.');
+  const r=await fetch(API+path,Object.assign({},opts,{headers:Object.assign({
+    Authorization:'Bearer '+t,
+    Accept:'application/vnd.github+json',
+    'X-GitHub-Api-Version':'2022-11-28'
+  },(opts&&opts.headers)||{})}));
+  if(!r.ok){
+    let d='';try{d=(await r.json()).message||''}catch(e){}
+    if(r.status===401)throw new Error('الرمز غير صالح أو منتهي (401).');
+    if(r.status===403||r.status===404)throw new Error('الرمز لا يملك صلاحية Contents: Read and write على هذا المستودع ('+r.status+'). '+d);
+    throw new Error('GitHub '+r.status+': '+d);
+  }
+  return r.json();
+}
+const post=(p,body)=>gh(p,{method:'POST',body:JSON.stringify(body)});
+
+async function getFile(path){
+  const j=await gh('/repos/'+REPO+'/contents/'+path+'?ref='+BRANCH);
+  const bin=Uint8Array.from(atob(j.content.replace(/\n/g,'')),c=>c.charCodeAt(0));
+  return new TextDecoder('utf-8').decode(bin);
+}
+
+async function commitBoth(dataJs,arJs,message){
+  const ref=await gh('/repos/'+REPO+'/git/ref/heads/'+BRANCH);
+  const head=ref.object.sha;
+  const parent=await gh('/repos/'+REPO+'/git/commits/'+head);
+  const mk=async c=>(await post('/repos/'+REPO+'/git/blobs',{content:c,encoding:'utf-8'})).sha;
+  const [bData,bAr]=await Promise.all([mk(dataJs),mk(arJs)]);
+  const tree=await post('/repos/'+REPO+'/git/trees',{
+    base_tree:parent.tree.sha,
+    tree:[{path:'src/data.js',mode:'100644',type:'blob',sha:bData},
+          {path:'src/ar.js',  mode:'100644',type:'blob',sha:bAr}]
+  });
+  const commit=await post('/repos/'+REPO+'/git/commits',{
+    message:message,tree:tree.sha,parents:[head]
+  });
+  await gh('/repos/'+REPO+'/git/refs/heads/'+BRANCH,
+    {method:'PATCH',body:JSON.stringify({sha:commit.sha})});
+  return commit;
+}
+
+/* ---------- form ---------- */
+function values(){
+  return {d:$('#d').value, t_en:$('#t_en').value, t_ar:$('#t_ar').value,
+    x_en:$('#x_en').value, x_ar:$('#x_ar').value,
+    lat:$('#lat').value.trim(), lon:$('#lon').value.trim(),
+    k:$('#k').value, by:$('#by').value, st:$('#st').value, ic:$('#ic').value,
+    s_lab:$('#s_lab').value, s_url:$('#s_url').value.trim()};
+}
+function preview(){
+  const v=values();
+  if(!v.d||!v.t_en){el.prev.textContent='—';return}
+  v.key=v.s_url?srcKey(v.s_url,v.d):'srcKey';
+  el.prev.textContent=rowLine(v)+'\n\nAR.rows += ['+jq(v.t_ar||'…')+','+jq(v.x_ar||'…')+']'
+    +'\n\nSRC.'+v.key+' = ['+jq(v.s_lab||'…')+','+jq(v.s_url||'…')+']';
+}
+document.getElementById('f').addEventListener('input',preview);
+$('#d').value=new Date().toISOString().slice(0,10);
+preview();
+
+document.getElementById('f').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const v=values();
+  const lat=parseFloat(v.lat),lon=parseFloat(v.lon);
+  if(!(lat>=-90&&lat<=90)||!(lon>=-180&&lon<=180))
+    return say('err','الإحداثيات غير صحيحة.');
+  if(!/^https?:\/\//.test(v.s_url))
+    return say('err','رابط المصدر لازم يبدأ بـ https://');
+
+  el.go.disabled=true;
+  try{
+    say('work','أقرأ ملفات المستودع…');
+    let [dataJs,arJs]=await Promise.all([getFile('src/data.js'),getFile('src/ar.js')]);
+
+    // keep the source key unique
+    let key=srcKey(v.s_url,v.d),n=1;
+    while(new RegExp('(^|[\\s{])'+key+'\\s*:').test(dataJs)){key=srcKey(v.s_url,v.d)+String.fromCharCode(96+n);n++;if(n>25)throw new Error('تعذّر توليد مفتاح مصدر فريد.')}
+    v.key=key; v.lat=lat; v.lon=lon;
+
+    say('work','أجهّز التعديل…');
+    dataJs=addSource(dataJs,key,v.s_lab,v.s_url);
+    dataJs=addRow(dataJs,rowLine(v));
+    dataJs=setUpdated(dataJs,v.d);
+    arJs=addAr(arJs,v.t_ar,v.x_ar);
+
+    say('work','أرفع التعديل إلى GitHub…');
+    const c=await commitBoth(dataJs,arJs,'Add event: '+clean(v.t_en)+'\n\nAdded from the admin page.');
+
+    say('ok','تم النشر ✅\nالحدث أُضيف وسيظهر على الموقع خلال دقيقة إلى دقيقتين '
+      +'(يُعاد بناء الموقع تلقائيًا ثم ينشر).\n\nرقم التعديل: '+c.sha.slice(0,7));
+    document.getElementById('f').reset();
+    $('#d').value=new Date().toISOString().slice(0,10);
+    preview();
+  }catch(err){
+    say('err','ما تم النشر ❌\n'+(err&&err.message||err)+'\n\nلم يتغيّر شي في الموقع — جرّب مرة ثانية.');
+  }finally{
+    el.go.disabled=false;
+  }
+});
+</script>
+</body>
+</html>
