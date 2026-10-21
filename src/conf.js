@@ -12,6 +12,8 @@ const CONF={
  short:{capital:'',sanaa:'',amran:'',mahwit:'',raymah:'',aden:'',dhale:'Dhale',bayda:'Bayda',mahrah:'Mahrah'},
  who:{H:'Houthis',G:'Government',S:'STC',A:'AQAP'},
  act:{H:'Houthis',G:'Government',C:'Saudi-led coalition',S:'STC',A:'AQAP',U:'Unclear'},
+ /* the forces this conflict is fought between, in the order the bars show them */
+ legend:[['H','Houthis'],['G','Government'],['S','STC'],['A','AQAP']],
  /* quick zoom targets under the map */
  focus:[{ll:[13.58,44.02],i:'f_taiz',en:'Taiz'},
         {ll:[15.46,45.33],i:'f_marib',en:'Marib'},

@@ -483,7 +483,7 @@ footer{opacity:.8}
   <footer data-i="t_footer">Governorate and district boundaries: OCHA and Yemen Central Statistical Organization via geoBoundaries (CC BY 3.0 IGO). Neighbouring countries and roads: Natural Earth (public domain). Not for navigation or safety decisions. <a href="/events/">All events</a>. Contact: <a href="mailto:contact@frontswatch.com">contact@frontswatch.com</a></footer>
 </div>
 
-<script src="conf.js?v=06983592"></script>
+<script src="conf.js?v=22748a08"></script>
 <script src="data.js?v=885fd30b"></script>
 <script src="geo.js?v=12992f04"></script>
 <script src="ar.js?v=ff210717"></script>
@@ -691,8 +691,8 @@ function drawMarkers(){
 /* ----- icons and legend ----- */
 function glyphSvg(sub,cls){return `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"${sub==='aid'?' style="color:#d92b2b;fill:#d92b2b"':''}>${GLYPH[sub]||GLYPH.ground}</svg>`}
 function iconSvg(k,cls){return glyphSvg(KSUB[k],cls)}
-function buildLegend(){$('#legend').innerHTML=[['<span class="sw H"></span>','Houthis'],['<span class="sw G"></span>','Government'],['<span class="sw S"></span>','STC'],['<span class="sw A"></span>','AQAP'],['<span class="sw mx"></span>','Mixed control'],['<span class="sw fz"></span>','Reported fighting']].map(([s,x])=>`<span class="i">${s}${tr(x)}</span>`).join('');
-$('#kg').innerHTML=[['H','Houthis'],['G','Government or coalition'],['S','STC'],['A','AQAP'],['HG','Split control']].map(([c,x])=>`<div><span class="sw ${c}"></span>${tr(x)}</div>`).join('')+
+function buildLegend(){$('#legend').innerHTML=CONF.legend.map(([c,x])=>[`<span class="sw ${c}"></span>`,x]).map(([sw,x])=>sw+tr(x)).join('')+`<span class="sw HG"></span>`+tr('Split control');
+$('#kg').innerHTML=CONF.legend.concat([['HG','Split control']]).map(([c,x])=>`<div><span class="sw ${c}"></span>${tr(x)}</div>`).join('')+
  Object.keys(SUBLAB).map(s=>`<div>${glyphSvg(s,'ks')}${tr(SUBLAB[s])}</div>`).join('')+`<div><span class="sw" style="background:var(--panel);border:2px solid var(--ink)"></span>${tr('Hollow badge: unverified claim')}</div>`}
 
 /* ----- date controls ----- */
@@ -782,7 +782,7 @@ function paneSit(){
   const by=(k,f)=>win.filter(e=>e.k===k&&(!f||f(e))).length;
   const sk=by('strike'),skH=by('strike',e=>e.by==='H'),skC=by('strike',e=>e.by==='C'||e.by==='G');
   const claimed=win.filter(e=>e.st==='claimed').length;
-  const bar=[['H',c.H],['G',c.G],['S',c.S],['X',c.X]].filter(a=>a[1]).map(([k,n])=>`<i style="width:${n/22*100}%;background:${k==='X'?'repeating-linear-gradient(45deg,var(--muted) 0 3px,var(--panel) 3px 6px)':`var(--${k.toLowerCase()})`}"></i>`).join('');
+  const bar=CONF.legend.map(([k])=>[k,c[k]||0]).concat([['X',c.X]]).filter(a=>a[1]).map(([k,n])=>`<i style="width:${n/IDS.length*100}%;background:${k==='X'?'repeating-linear-gradient(45deg,var(--muted) 0 3px,var(--panel) 3px 6px)':`var(--${k.toLowerCase()})`}"></i>`).join('');
   const cmp=st.range==='all'?tr('the start'):fmt(isoOf(loOf()));
   return `<div><h3>${tr('Control as of {d}',{d:fmt(s.d)})}</h3><h2>${sa.t}</h2><p class="sum">${sa.sum}</p></div>
   ${SIEGES.filter(sgOn).map(sg=>{const a=SIEGE_ADAPT(sg);return `<div class="alert"><b>${tr('Besieged: {n}',{n:tr(sg.name)})}</b><span>${a.t}. ${a.x}</span></div>`}).join('')}
@@ -791,7 +791,7 @@ function paneSit(){
    <tr><td>${tr('Political events')}</td><td>${by('politics')}</td></tr><tr><td>${tr('Humanitarian reports')}</td><td>${by('humanitarian')}</td></tr>
    <tr><td>${tr('Claimed, not confirmed')}<div class="sm">${tr('Stated by one party and not independently checked')}</div></td><td>${tr('{a} of {b}',{a:claimed,b:win.length})}</td></tr></table>`:`<p class="none">${tr('No events recorded in this window. Try a longer look-back.')}</p>`}</div>
   <div><h3>${tr('Governorates by control (of 22)')}</h3><div class="stack" role="img" aria-label="${tr('Share of governorates by control')}">${bar}</div>
-   <div class="counts"><span>${sw('H')}${tr('Houthis')} <b>${c.H}</b></span><span>${sw('G')}${tr('Government')} <b>${c.G}</b></span><span>${sw('S')}${tr('STC')} <b>${c.S}</b></span><span>${sw('HG')}${tr('Split')} <b>${c.X}</b></span></div></div>
+   <div class="counts">${CONF.legend.filter(([k])=>c[k]).map(([k,x])=>`<span>${sw(k)}${tr(x)} <b>${c[k]}</b></span>`).join('')}<span>${sw('HG')}${tr('Split')} <b>${c.X}</b></span></div></div>
   <div><h3>${tr('Control changes since {d}',{d:cmp})}</h3>${chg.length?`<ul class="list">${chg.map(id=>`<li class="ch"><span class="nm">${nm(id)}</span>${sw(prev[id])}<span>${codeName(prev[id])}</span><span class="arrow">${LANG==='ar'?'&larr;':'&rarr;'}</span>${sw(cur[id])}<span>${codeName(cur[id])}</span></li>`).join('')}</ul>`:`<p class="none">${tr('No governorate changed colour. Fighting and claims can continue inside the lines.')}</p>`}</div>`;
 }
 function evItem(e){
@@ -882,7 +882,7 @@ function drawRibbon(){
   if(!box.children.length)SNAPS.forEach((s,i)=>{
     const c=countsOf(CTRL[i+1]);
     const sa=snT(s,i);const b=document.createElement('button');b.className='col';b.title=`${fmt(s.d)}: ${sa.t}`;b.setAttribute('aria-label',`${fmt(s.d)}: ${esc(sa.t)}`);
-    b.innerHTML=`<span class="bar">${[['H',c.H],['S',c.S],['G',c.G],['X',c.X]].filter(a=>a[1]).map(([k,n])=>`<i style="flex:${n};background:${k==='X'?'repeating-linear-gradient(45deg,var(--muted) 0 3px,var(--panel) 3px 6px)':`var(--${k.toLowerCase()})`}"></i>`).join('')}</span><span class="d">${sa.lab.replace(' ','<br>')}</span>`;
+    b.innerHTML=`<span class="bar">${CONF.legend.map(([k])=>[k,c[k]||0]).concat([['X',c.X]]).filter(a=>a[1]).map(([k,n])=>`<i style="flex:${n};background:${k==='X'?'repeating-linear-gradient(45deg,var(--muted) 0 3px,var(--panel) 3px 6px)':`var(--${k.toLowerCase()})`}"></i>`).join('')}</span><span class="d">${sa.lab.replace(' ','<br>')}</span>`;
     b.onclick=()=>setSel(SNAPN[i]);box.appendChild(b);
   });
   const a=snapAt(st.sel);[...box.children].forEach((b,i)=>b.setAttribute('aria-current',String(i===a)));
