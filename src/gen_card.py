@@ -209,8 +209,13 @@ def shoot(html_path, png_path):
                     '  () => document.fonts.check(\'700 40px "Noto Sans Arabic"\'))',
                     timeout=20000)
             except Exception:
-                print('gen_card: the web font did not load; '
-                      'the card falls back to a system Arabic face')
+                # Substituted Arabic faces draw a dotless final yaa, which
+                # reads as a spelling mistake. Better a card a few hours old
+                # than a misspelt one, so leave the committed PNG alone.
+                print('gen_card: the Arabic web font never loaded; '
+                      'keeping the existing daily.png')
+                b.close()
+                return False
             pg.wait_for_timeout(250)
             pg.screenshot(path=png_path)
             b.close()
