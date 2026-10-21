@@ -112,7 +112,7 @@ HTML_TMPL = """<!doctype html>
 
   {src_block}
 
-  <a class="cta" href="/">{cta_label}</a>
+  <a class="cta" href="/?view=map">{cta_label}</a>
 
   <footer>
     <span lang-en>Part of <a href="/">Frontswatch</a>, a daily-updated map and timeline of the war in Yemen. See <a href="/events/">all events</a>.</span>
@@ -230,7 +230,7 @@ li .date{{color:var(--muted);margin-inline-end:6px}}
   </div>
   <div lang-en><h1>All events</h1><p class="desc">Every event on the Frontswatch map, newest first.</p><ul>{rows_html_en}</ul></div>
   <div lang-ar dir="rtl" style="display:none"><h1>جميع الأحداث</h1><p class="desc">كل حدث على خريطة راصد، الأحدث أولًا.</p><ul>{rows_html_ar}</ul></div>
-  <a class="cta" href="/"><span lang-en>Back to the map</span><span lang-ar dir="rtl" style="display:none">عودة للخريطة</span></a>
+  <a class="cta" href="/?view=map"><span lang-en>Back to the map</span><span lang-ar dir="rtl" style="display:none">عودة للخريطة</span></a>
 </div>
 <script>{LANG_SCRIPT}</script>
 </body>

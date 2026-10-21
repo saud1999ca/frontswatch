@@ -856,7 +856,7 @@ function pickEvent(id,fromMap){
   const b=document.querySelector(`#evl .ev[data-id="${id}"]`);document.querySelectorAll('#evl .ev').forEach(x=>x.classList.toggle('on',+x.dataset.id===st.hl));
   if(fromMap&&b)b.scrollIntoView({block:'nearest',behavior:'smooth'});
   const e=EVS[EVS.findIndex(x=>x.id===id)];
-  if(!fromMap&&e&&e.ll){const p=px(e.ll[0],e.ll[1]);const r=svg.getBoundingClientRect();const s=r.width/vb.w,h=vb.w*r.height/r.width;const x0=vb.cx-vb.w/2,y0=vb.cy-h/2;if(p[0]<x0+20/s||p[0]>x0+vb.w-20/s||p[1]<y0+20/s||p[1]>y0+h-20/s){vb.cx=p[0];vb.cy=p[1];st.manual=true;applyVB()}}
+  if(!fromMap&&e&&e.ll){if(st.page==='info')setPage('both');const p=px(e.ll[0],e.ll[1]);const r=svg.getBoundingClientRect();const s=r.width/vb.w,h=vb.w*r.height/r.width;const x0=vb.cx-vb.w/2,y0=vb.cy-h/2;if(p[0]<x0+20/s||p[0]>x0+vb.w-20/s||p[1]<y0+20/s||p[1]>y0+h-20/s){vb.cx=p[0];vb.cy=p[1];st.manual=true;applyVB()}}
 }
 
 /* ----- ribbon of control periods ----- */
@@ -944,7 +944,7 @@ $('#lang').onclick=()=>{LANG=LANG==='ar'?'en':'ar';try{localStorage.setItem('yfl
 applyLang(true);
 function setPage(pg){st.page=pg;const ap=document.querySelector('.app');ap.classList.remove('pg-map','pg-both','pg-info');ap.classList.add('pg-'+pg);document.querySelectorAll('#pages button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.p===pg)));try{localStorage.setItem('yfl-page',pg)}catch(e){}requestAnimationFrame(()=>{if(st.view==='auto'&&!st.manual)fitBox(BOX[autoKind()]);recFit();setVB();fullDraw()})}
 $('#pages').onclick=e=>{const b=e.target.closest('button[data-p]');if(b)setPage(b.dataset.p)};
-(function(){let pg='both';try{pg=localStorage.getItem('yfl-page')||'both'}catch(e){}setPage(pg)})();
+(function(){let pg='both';try{pg=localStorage.getItem('yfl-page')||'both'}catch(e){}try{if(new URLSearchParams(location.search).get('view')==='map'){pg='both';history.replaceState(null,'',location.pathname+location.hash)}}catch(e){}setPage(pg)})();
 (function(){const r=document.documentElement;try{const v=localStorage.getItem('yfl-theme');if(v)r.dataset.theme=v}catch(e){}
   $('#theme').onclick=()=>{const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem('yfl-theme',r.dataset.theme)}catch(e){}fullDraw()};})();
 window.READY=1;
