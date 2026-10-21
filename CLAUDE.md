@@ -15,6 +15,13 @@ of the war in Yemen.
     `ar.js`).
   - `build.py` — generates `../site/` from the files above. Run it with
     `python3 build.py` from inside `src/`.
+- Design versions: the `v1.0` branch holds the original layout. v2.0 (current)
+  is phone-first: full-screen map, a draggable bottom sheet (`setSheet`:
+  closed/peek/half/full), one time bar (`#timebox`) and a bottom tab bar
+  (`#tabs`); look-back range, day strip and control periods live in the
+  `#tpanel` pop-up, filters and key in `#lpanel`. Above 900px the same DOM
+  becomes map + side panel. The interface accent is amber (`--acc`) so it
+  never reads as a faction colour. New UI strings go in `AR.ui`.
 - `site/` — generated output. **Never hand-edit.** This is the exact
   folder Cloudflare Pages deploys (Pages build output directory = `site`).
 
