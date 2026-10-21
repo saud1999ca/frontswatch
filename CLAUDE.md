@@ -45,9 +45,23 @@ of the war in Yemen.
 
 ## Sourcing standards (matches the site's published Methodology page)
 
-Primary sources: Al Jazeera, Anadolu; ACLED, the Long War Journal, ISW/
-Critical Threats; Security Council Report; Wikipedia as an index to
-underlying reporting, not as the source itself. Every row must carry a
+Primary sources, in this order: official Saudi and coalition statements
+(Saudi Press Agency, spa.gov.sa — coalition spokesman, GACA, ministries,
+civil defence); Al Arabiya, Asharq, Al Jazeera, Anadolu; ACLED, the Long
+War Journal, ISW/Critical Threats; Security Council Report; Wikipedia as an
+index to underlying reporting, not as the source itself.
+
+**Attacks on Saudi Arabia (owner's editorial rule, disclosed on the
+Methodology page):** a missile, drone or other attack on Saudi territory or
+a Saudi vessel goes in only if a Saudi official body has announced it, and
+it is worded the way that body worded it (e.g. "the coalition says it
+intercepted…"), with `status: confirmed` and the official statement as the
+source. If Saudi authorities have not announced it — a Houthi claim, or a
+media report that contradicts the official account (e.g. "it hit its
+target" when the coalition says it was intercepted) — leave it out
+entirely. Don't add the contradicting version as a second sentence either.
+
+Every row must carry a
 real, working source URL. Don't fabricate a source or a coordinate — if
 unsure of the exact location, use the governorate capital's coordinates
 and say so in the description, or mark the row `reported`/`claimed`
