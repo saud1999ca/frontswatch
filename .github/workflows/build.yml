@@ -39,9 +39,14 @@ jobs:
         run: |
           pip install --quiet playwright
           playwright install --with-deps chromium
-          # a proper Arabic face, so the card is still right if Google Fonts
-          # is slow or unreachable during the build
-          sudo apt-get install -y --no-install-recommends fonts-noto-naskh-arabic
+
+      # A local Arabic face in case Google Fonts is slow or unreachable while
+      # the card renders. Nice to have, never a reason to fail the build.
+      - name: Arabic fallback font
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-core
 
       - name: Build
         working-directory: src
