@@ -226,18 +226,24 @@ function rowLine(v){
 }
 
 /* ---------- patching the source files as text ---------- */
+/* the last entry of SRC/ROWS may or may not carry a trailing comma, so add one
+   only when it is missing — otherwise the file stops parsing */
+function joinIn(data,close,text){
+  const head=data.slice(0,close).replace(/\s+$/,'');
+  return head+(head.endsWith(',')?'':',')+text+data.slice(close);
+}
 function addSource(data,key,label,url){
   const rowsAt=data.indexOf('const ROWS=[');
   if(rowsAt<0)throw new Error('ROWS not found in data.js');
   const close=data.lastIndexOf('};',rowsAt);
   if(close<0)throw new Error('end of SRC not found in data.js');
-  return data.slice(0,close)+' '+key+':['+q(label)+','+q(url)+'],\n'+data.slice(close);
+  return joinIn(data,close,'\n '+key+':['+q(label)+','+q(url)+']\n');
 }
 function addRow(data,line){
   const rowsAt=data.indexOf('const ROWS=[');
   const close=data.indexOf('\n];',rowsAt);
   if(close<0)throw new Error('end of ROWS not found in data.js');
-  return data.slice(0,close)+'\n'+line+data.slice(close);
+  return joinIn(data,close,'\n'+line);
 }
 function setUpdated(data,date){
   return data.replace(/const LAST_UPDATED='[^']*';/,"const LAST_UPDATED='"+date+"';");
@@ -259,7 +265,7 @@ function arRowsEnd(ar){
 }
 function addAr(ar,title,desc){
   const end=arRowsEnd(ar);
-  return ar.slice(0,end)+',['+jq(title)+','+jq(desc)+']'+ar.slice(end);
+  return joinIn(ar,end,'['+jq(title)+','+jq(desc)+']');
 }
 
 /* ---------- GitHub ---------- */
