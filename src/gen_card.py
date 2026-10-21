@@ -69,7 +69,7 @@ CARD = """<!doctype html>
 <style>
 *{{box-sizing:border-box;margin:0}}
 body{{width:1200px;height:630px;overflow:hidden;background:#0c1216;color:#e7edf0;
-  font-family:'Noto Sans Arabic',sans-serif;display:flex;flex-direction:column;
+  font-family:'Noto Sans Arabic','Noto Naskh Arabic','Noto Sans Arabic UI','Noto Sans',sans-serif;display:flex;flex-direction:column;
   padding:46px 54px 40px;gap:0}}
 .top{{display:flex;align-items:center;justify-content:space-between}}
 .brand{{display:flex;align-items:center;gap:14px}}
@@ -100,7 +100,7 @@ body{{width:1200px;height:630px;overflow:hidden;background:#0c1216;color:#e7edf0
 
 .foot{{flex:none;display:flex;align-items:center;justify-content:space-between;
   border-top:1px solid #2a3640;padding-top:16px;margin-top:4px}}
-.foot .u{{font-family:'Archivo',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.01em;direction:ltr}}
+.foot .u{{font-family:'Archivo','DejaVu Sans',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.01em;direction:ltr}}
 .foot .c{{font-size:16px;color:#93a1aa}}
 </style></head><body>
   <div class="top">
@@ -155,7 +155,7 @@ def build(out_site_dir):
         f'{ACTOR[k][0]} <b>{ar_num(counts[k])}</b></span>' for k in order)
 
     # the newest events, by date
-    idx = sorted(range(len(rows)), key=lambda i: (rows[i][0], i), reverse=True)[:4]
+    idx = sorted(range(len(rows)), key=lambda i: (rows[i][0], i), reverse=True)[:3]
     cards = []
     for i in idx:
         r = rows[i]
