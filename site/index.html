@@ -381,7 +381,7 @@ footer{opacity:.8}
   .app.pg-map .side{display:none!important}
   .app.pg-map .mapwrap{height:auto!important}
   .app.pg-both .mapwrap{flex:0 0 calc(var(--mapshare,45) * 1%)}
-  .app.pg-both .side{flex:1 1 auto;min-height:0;display:flex!important;flex-direction:column}
+  .app.pg-both .side{flex:1 1 auto;min-height:34px;display:flex!important;flex-direction:column}
   .app.pg-both .chips{display:none}
   .tip{max-width:min(72vw,240px);font-size:12px;padding:7px 9px}
   .tip.pin{max-height:min(58%,300px);overflow:auto;overscroll-behavior:contain}
@@ -959,8 +959,21 @@ function setPage(pg){st.page=pg;const ap=document.querySelector('.app');ap.class
 $('#pages').onclick=e=>{const b=e.target.closest('button[data-p]');if(b)setPage(b.dataset.p)};
 /* ----- drag the divider under the map to resize map vs info (mobile) ----- */
 let mapShare=45;
+/* the column also holds the time controls, so the map's ceiling has to leave
+   room for them plus the handle itself, or the handle gets squeezed away */
+function shareBounds(){
+  const main=document.querySelector('.main');
+  if(!main)return[18,78];
+  const h=main.getBoundingClientRect().height;
+  if(!h)return[18,78];
+  const tb=document.querySelector('.timebox');
+  const tbh=tb?tb.getBoundingClientRect().height:0;
+  const hi=(h-tbh-62)/h*100, lo=120/h*100;
+  return[Math.max(10,Math.min(lo,60)),Math.max(20,Math.min(hi,82))];
+}
 function setMapShare(v,save){
-  mapShare=Math.max(18,Math.min(78,v));
+  const[lo,hi]=shareBounds();
+  mapShare=Math.max(lo,Math.min(hi,v));
   document.querySelector('.app').style.setProperty('--mapshare',mapShare.toFixed(1));
   if(save){try{localStorage.setItem('yfl-mapshare',mapShare.toFixed(1))}catch(e){}}
 }
@@ -988,11 +1001,12 @@ function setMapShare(v,save){
     if(!dr)return;
     const tapped=!dr.moved;dr=null;
     g.classList.remove('on');ap.classList.remove('resizing');
-    if(tapped)setMapShare(mapShare>48?22:70);
+    if(tapped)setMapShare(mapShare>48?22:100);
     setMapShare(mapShare,1);refit();
   };
   g.addEventListener('pointerup',end);
   g.addEventListener('pointercancel',end);
+  addEventListener('resize',()=>{setMapShare(mapShare);refit()});
   g.addEventListener('keydown',e=>{
     const d=e.key==='ArrowUp'?-5:e.key==='ArrowDown'?5:0;
     if(!d)return;e.preventDefault();setMapShare(mapShare+d,1);refit();
