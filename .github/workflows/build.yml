@@ -39,6 +39,9 @@ jobs:
         run: |
           pip install --quiet playwright
           playwright install --with-deps chromium
+          # a proper Arabic face, so the card is still right if Google Fonts
+          # is slow or unreachable during the build
+          sudo apt-get install -y --no-install-recommends fonts-noto-naskh-arabic
 
       - name: Build
         working-directory: src

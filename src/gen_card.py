@@ -89,16 +89,16 @@ body{{width:1200px;height:630px;overflow:hidden;background:#0c1216;color:#e7edf0
 .key b{{font-weight:700;color:#e7edf0}}
 .key .sw{{width:12px;height:12px;border-radius:3px;display:block}}
 
-.evs{{margin-top:28px;flex:1;display:flex;flex-direction:column;gap:11px}}
+.evs{{margin-top:28px;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:11px}}
 .evs h2{{font-size:15px;color:#93a1aa;font-weight:600;margin-bottom:2px}}
-.ev{{display:flex;align-items:baseline;gap:13px;background:#161e24;border:1px solid #2a3640;
+.ev{{flex:none;display:flex;align-items:baseline;gap:13px;background:#161e24;border:1px solid #2a3640;
   border-radius:11px;padding:13px 17px}}
 .ev .t{{font-size:21px;font-weight:600;line-height:1.35;flex:1;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
 .ev .b{{font-size:13px;padding:3px 11px;border-radius:999px;border:1px solid;white-space:nowrap}}
 .ev .dt{{font-size:14px;color:#93a1aa;white-space:nowrap;font-variant-numeric:tabular-nums}}
 
-.foot{{display:flex;align-items:center;justify-content:space-between;
+.foot{{flex:none;display:flex;align-items:center;justify-content:space-between;
   border-top:1px solid #2a3640;padding-top:16px;margin-top:4px}}
 .foot .u{{font-family:'Archivo',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.01em;direction:ltr}}
 .foot .c{{font-size:16px;color:#93a1aa}}
@@ -203,7 +203,15 @@ def shoot(html_path, png_path):
             pg = b.new_page(viewport={'width': 1200, 'height': 630},
                             device_scale_factor=1)
             pg.goto('file://' + html_path)
-            pg.wait_for_timeout(1200)          # let the webfonts land
+            try:
+                pg.wait_for_function(
+                    '() => document.fonts.ready.then('
+                    '  () => document.fonts.check(\'700 40px "Noto Sans Arabic"\'))',
+                    timeout=20000)
+            except Exception:
+                print('gen_card: the web font did not load; '
+                      'the card falls back to a system Arabic face')
+            pg.wait_for_timeout(250)
             pg.screenshot(path=png_path)
             b.close()
         return True
