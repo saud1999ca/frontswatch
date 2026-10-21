@@ -657,7 +657,7 @@ $('#kg').innerHTML=[['H','Houthis'],['G','Government or coalition'],['S','STC'],
 /* ----- date controls ----- */
 $('#dinp').min=START;$('#dinp').max=END;
 let WLO=SN,WHI=EN;
-function spanOf(){return st.range==='all'?EN-SN:Math.max(14,+st.range)}
+function spanOf(){if(st.range==='all')return EN-SN;const r=+st.range;return r<7?7:Math.max(14,r)}
 function setWindow(force){
   const sp=spanOf();
   if(st.range==='all'){WLO=SN;WHI=EN;return}
