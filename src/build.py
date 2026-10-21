@@ -54,6 +54,9 @@ today=datetime.date.today().isoformat()
 import gen_events
 event_urls=gen_events.build(out)
 
+import gen_card
+gen_card.build(out)
+
 sitemap_urls=[(f'{D}/',today)]+[(u,today) for u in event_urls]
 sm='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
 for u,lm in sitemap_urls: sm+=f'  <url><loc>{u}</loc><lastmod>{lm}</lastmod></url>\n'

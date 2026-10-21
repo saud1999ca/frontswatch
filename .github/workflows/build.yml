@@ -33,6 +33,13 @@ jobs:
         with:
           node-version: '20'
 
+      # gen_card.py screenshots the daily share card; without a browser the
+      # build still succeeds but daily.png keeps yesterday's numbers
+      - name: Install Chromium for the daily card
+        run: |
+          pip install --quiet playwright
+          playwright install --with-deps chromium
+
       - name: Build
         working-directory: src
         run: python3 build.py

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:630px;overflow:hidden;background:#0c1216;color:#e7edf0;
+  font-family:'Noto Sans Arabic',sans-serif;display:flex;flex-direction:column;
+  padding:46px 54px 40px;gap:0}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}
+.brand svg{width:62px;height:43px}
+.brand .nm{font-size:40px;font-weight:700;letter-spacing:-.01em;line-height:1}
+.brand .tag{font-size:16px;color:#93a1aa;margin-top:5px}
+.date{text-align:left;direction:rtl}
+.date .d{font-size:27px;font-weight:600;line-height:1.2}
+.date .l{font-size:15px;color:#93a1aa;margin-top:3px}
+
+.ctrl{margin-top:30px}
+.ctrl h2{font-size:15px;color:#93a1aa;font-weight:600;margin-bottom:9px}
+.bar{display:flex;height:17px;border-radius:999px;overflow:hidden;gap:2px}
+.bar i{display:block}
+.keys{display:flex;gap:22px;margin-top:11px;flex-wrap:wrap}
+.key{display:flex;align-items:center;gap:7px;font-size:17px;color:#cdd7dd}
+.key b{font-weight:700;color:#e7edf0}
+.key .sw{width:12px;height:12px;border-radius:3px;display:block}
+
+.evs{margin-top:28px;flex:1;display:flex;flex-direction:column;gap:11px}
+.evs h2{font-size:15px;color:#93a1aa;font-weight:600;margin-bottom:2px}
+.ev{display:flex;align-items:baseline;gap:13px;background:#161e24;border:1px solid #2a3640;
+  border-radius:11px;padding:13px 17px}
+.ev .t{font-size:21px;font-weight:600;line-height:1.35;flex:1;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev .b{font-size:13px;padding:3px 11px;border-radius:999px;border:1px solid;white-space:nowrap}
+.ev .dt{font-size:14px;color:#93a1aa;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.foot{display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid #2a3640;padding-top:16px;margin-top:4px}
+.foot .u{font-family:'Archivo',sans-serif;font-size:23px;font-weight:700;letter-spacing:-.01em;direction:ltr}
+.foot .c{font-size:16px;color:#93a1aa}
+</style></head><body>
+  <div class="top">
+    <div class="brand">
+      <svg viewBox="0 0 64 44" aria-hidden="true">
+        <path d="M4 22C14 8 24 3 32 3s18 5 28 19" fill="none" stroke="#ef6b64" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M4 22c10 14 20 19 28 19s18-5 28-19" fill="none" stroke="#6f93f5" stroke-width="4.5" stroke-linecap="round"/>
+        <circle cx="32" cy="22" r="8.5" fill="#e7edf0"/><circle cx="32" cy="22" r="2.8" fill="#0c1216"/>
+      </svg>
+      <div><div class="nm">راصد</div><div class="tag">متابعة يومية لحرب اليمن</div></div>
+    </div>
+    <div class="date"><div class="d">21 أكتوبر 2026</div><div class="l">آخر تحديث</div></div>
+  </div>
+
+  <div class="ctrl">
+    <h2>السيطرة على المحافظات</h2>
+    <div class="bar"><i style="flex:12;background:#ef6b64"></i><i style="flex:8;background:#6f93f5"></i><i style="flex:2;background:repeating-linear-gradient(45deg,#8d99a2 0 4px,#2a3640 4px 8px)"></i></div>
+    <div class="keys"><span class="key"><i class="sw" style="background:#ef6b64"></i>الحوثيون <b>12</b></span><span class="key"><i class="sw" style="background:#6f93f5"></i>الحكومة <b>8</b></span><span class="key"><i class="sw" style="background:repeating-linear-gradient(45deg,#8d99a2 0 4px,#2a3640 4px 8px)"></i>متنازع عليها <b>2</b></span></div>
+  </div>
+
+  <div class="evs">
+    <h2>أحدث ما رُصد</h2>
+    <div class="ev"><span class="b" style="color:#ef6b64;border-color:#ef6b64">غير مؤكد</span><span class="t">هجوم صاروخي حوثي على معسكر عسكري في شبوة</span><span class="dt">19 أكتوبر 2026</span></div>
+    <div class="ev"><span class="b" style="color:#ef6b64;border-color:#ef6b64">غير مؤكد</span><span class="t">أنباء عن إرسال الحوثيين مئات المقاتلين نحو تعز</span><span class="dt">19 أكتوبر 2026</span></div>
+    <div class="ev"><span class="b" style="color:#8d99a2;border-color:#8d99a2">غير مؤكد</span><span class="t">نزوح 233 ألف شخص وعزل مدينة تعز</span><span class="dt">18 أكتوبر 2026</span></div>
+    <div class="ev"><span class="b" style="color:#8d99a2;border-color:#8d99a2">مؤكد</span><span class="t">إطلاق نار على ناقلة غاز طبيعي مسال قبالة المكلا</span><span class="dt">18 أكتوبر 2026</span></div>
+  </div>
+
+  <div class="foot">
+    <div class="u">frontswatch.com</div>
+    <div class="c">96 حدثًا، كل واحد بمصدره</div>
+  </div>
+</body></html>
