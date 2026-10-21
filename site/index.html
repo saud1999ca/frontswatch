@@ -475,7 +475,7 @@ footer{opacity:.8}
 
 <script src="data.js?v=b72c6a31"></script>
 <script src="geo.js?v=12992f04"></script>
-<script src="ar.js?v=4d8e50c5"></script>
+<script src="ar.js?v=c82ba02c"></script>
 <script>
 const START='2014-09-21',END=LAST_UPDATED;
 let LANG='en';try{LANG=localStorage.getItem('yfl-lang')||((navigator.language||'').toLowerCase().startsWith('ar')?'ar':'en')}catch(e){}
@@ -694,6 +694,10 @@ function setWindow(force){
 function drawYrs(){
   const sl=$('#slider');sl.min=WLO;sl.max=WHI;sl.value=st.sel;
   const sp=WHI-WLO||1,pc=n=>(n-WLO)/sp*100;let a=[];
+  if(st.range==='1'){
+    $('#yrs').innerHTML=[0,25,50,75,100].map((p,i)=>`<span style="left:${p}%">${i===4?tr('Now'):tr('-{n}h',{n:24-i*6})}</span>`).join('');
+    return;
+  }
   if(st.range==='all'){[2015,2017,2019,2021,2023,2025].forEach(y=>a.push([dn(y+'-01-01'),String(y)]))}
   else if(sp<=45){const stp=sp<=16?(innerWidth<700?4:2):(innerWidth<700?7:7);for(let n=WHI;n>=WLO;n-=stp){const d=new Date(n*864e5);a.push([n,d.getUTCDate()+' '+MONn(d.getUTCMonth())])}}
   else{for(let n=WLO;n<=WHI;n++){const d=new Date(n*864e5);if(d.getUTCDate()===1)a.push([n,MONn(d.getUTCMonth())+(d.getUTCMonth()===0?' ’'+String(d.getUTCFullYear()).slice(2):'')])}if(sp>200)a=a.filter((x,i)=>i%2===0)}
