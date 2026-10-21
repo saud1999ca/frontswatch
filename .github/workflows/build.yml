@@ -35,13 +35,15 @@ jobs:
 
       # gen_card.py screenshots the daily share card; without a browser the
       # build still succeeds but daily.png keeps yesterday's numbers
+      # Everything below is only needed to redraw the daily share card.
+      # The site itself must build without it, so neither step may fail the
+      # job: when there is no browser, build.py leaves daily.png untouched.
       - name: Install Chromium for the daily card
+        continue-on-error: true
         run: |
-          pip install --quiet playwright
-          playwright install --with-deps chromium
+          pip install --quiet playwright || pip install --quiet --break-system-packages playwright
+          playwright install chromium || playwright install --with-deps chromium
 
-      # A local Arabic face in case Google Fonts is slow or unreachable while
-      # the card renders. Nice to have, never a reason to fail the build.
       - name: Arabic fallback font
         continue-on-error: true
         run: |
